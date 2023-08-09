@@ -8,17 +8,17 @@ ENV DEBIAN_FRONTEND=non-interactive
 RUN apt-get update && apt-get install -y wget curl apt-transport-https postgresql-client && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set up user and permissions
-RUN useradd --system --user-group mattermost && \
-    mkdir -p /opt/mattermost/data && \
-    chown -R mattermost:mattermost /opt/mattermost && \
-    chmod -R g+w /opt/mattermost
-
 # Download and install Mattermost
 RUN wget https://releases.mattermost.com/7.9.2/mattermost-7.9.2-linux-amd64.tar.gz && \
     tar -xvzf mattermost*.gz && \
     mv mattermost /opt && \
     rm mattermost*.gz
+
+# Set up user and permissions
+RUN useradd --system --user-group mattermost && \
+    mkdir -p /opt/mattermost/data && \
+    chown -R mattermost:mattermost /opt/mattermost && \
+    chmod -R g+w /opt/mattermost
 
 # Expose the default Mattermost port
 EXPOSE 8065
